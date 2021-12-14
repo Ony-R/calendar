@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
-    <!-- create event modal -->
-    <div class="modal-backdrop" v-show="isModalVisible" @close="closeModal">
+<!-- create event modal -->
+    <div class="modal-backdrop" v-show="isModalVisible">
       <div class="modal">
         <header class="modal-header">
           <slot name="header"> Add an event </slot>
@@ -19,7 +19,7 @@
         </footer>
       </div>
     </div>
-
+<!-- header -->
     <div class="header">
       <h3 class="monthDisplay">{{ thisMonth }} {{ currentYear }}</h3>
 
@@ -29,10 +29,13 @@
 
       <!-- <button class="headerButton">Month</button> -->
     </div>
+<!-- main content -->
     <div class="mainContent">
+<!-- events/side content -->
       <div class="sideContent">
         <h2>Upcoming Events</h2>
       </div>
+<!-- calendar content -->
       <div class="calendarDiv">
         <div class="weekDays">
           <span class="day" v-for="day in weekdays" :key="day">
@@ -40,7 +43,6 @@
           </span>
         </div>
 
-        <!-- ------------------------- -->
         <div class="week" v-for="week in weeks" :key="week">
           <div
             class="calendarDay"
@@ -51,10 +53,9 @@
             <a class="dayLink" @click="showModal"> {{ day.label }} </a>
           </div>
         </div>
-        <!-- ------------------------- -->
-      </div>
-    </div>
-  </div>
+      </div> 
+    </div> <!-- main content div -->
+  </div>       <!-- "hello" div -->
 </template>
 
 <script>
@@ -124,9 +125,6 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
-    },
-    close() {
-      this.$emit("close");
     },
   },
   computed: {
