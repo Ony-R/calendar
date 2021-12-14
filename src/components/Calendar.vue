@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-<!-- create event modal -->
+    <!-- create event modal -->
     <div class="modal-backdrop" v-show="isModalVisible">
       <div class="modal">
         <header class="modal-header">
@@ -8,7 +8,7 @@
           <button type="button" class="btn-close" @click="closeModal">x</button>
         </header>
         <section class="modal-body">
-          <slot name="body"> This is the default body! </slot>
+          <slot name="body"> {{ selectedDate }} </slot>
         </section>
 
         <footer class="modal-footer">
@@ -19,7 +19,7 @@
         </footer>
       </div>
     </div>
-<!-- header -->
+    <!-- header -->
     <div class="header">
       <h3 class="monthDisplay">{{ thisMonth }} {{ currentYear }}</h3>
 
@@ -29,13 +29,13 @@
 
       <!-- <button class="headerButton">Month</button> -->
     </div>
-<!-- main content -->
+    <!-- main content -->
     <div class="mainContent">
-<!-- events/side content -->
+      <!-- events/side content -->
       <div class="sideContent">
         <h2>Upcoming Events</h2>
       </div>
-<!-- calendar content -->
+      <!-- calendar content -->
       <div class="calendarDiv">
         <div class="weekDays">
           <span class="day" v-for="day in weekdays" :key="day">
@@ -53,9 +53,11 @@
             <a class="dayLink" @click="showModal"> {{ day.label }} </a>
           </div>
         </div>
-      </div> 
-    </div> <!-- main content div -->
-  </div>       <!-- "hello" div -->
+      </div>
+    </div>
+    <!-- main content div -->
+  </div>
+  <!-- "hello" div -->
 </template>
 
 <script>
@@ -221,7 +223,6 @@ export default {
         //apend week info for the month
         weeks.push(week);
       }
-      console.log(weeks);
       return weeks;
     },
   },
@@ -272,7 +273,7 @@ export default {
   width: 100%;
 }
 
-/*-----------  */
+/*----------- calendar */
 .week {
   display: flex;
 }
@@ -295,7 +296,6 @@ export default {
   border: solid 1px #aaaaaa;
 }
 
-/* ------------- */
 .calendarDay a {
   cursor: pointer;
 }
