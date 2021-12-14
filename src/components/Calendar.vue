@@ -1,34 +1,59 @@
 <template>
   <div class="hello">
-    <div class="header">
-      <button class="headerButton" @click="goToToday">Today</button>
+    <!-- create event modal -->
+    <div class="modal-backdrop" v-show="isModalVisible" @close="closeModal">
+      <div class="modal">
+        <header class="modal-header">
+          <slot name="header"> Add an event </slot>
+          <button type="button" class="btn-close" @click="closeModal">x</button>
+        </header>
+        <section class="modal-body">
+          <slot name="body"> This is the default body! </slot>
+        </section>
 
+        <footer class="modal-footer">
+          <slot name="footer"> </slot>
+          <button type="button" class="btn-green" @click="closeModal">
+            Close Modal
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <div class="header">
+      <h3 class="monthDisplay">{{ thisMonth }} {{ currentYear }}</h3>
+
+      <button class="headerButton" @click="goToToday">Today</button>
       <button class="headerButton" @click="decreaseMonth">&lt;</button>
       <button class="headerButton" @click="increaseMonth">&gt;</button>
 
-      <h3 class="monthDisplay">{{ thisMonth }} {{ currentYear }}</h3>
-
       <!-- <button class="headerButton">Month</button> -->
     </div>
-    <div class="weekDays">
-      <span class="day" v-for="day in weekdays" :key="day">
-        <h4>{{ day }}</h4>
-      </span>
-    </div>
-    
+    <div class="mainContent">
+      <div class="sideContent">
+        <h2>Upcoming Events</h2>
+      </div>
+      <div class="calendarDiv">
+        <div class="weekDays">
+          <span class="day" v-for="day in weekdays" :key="day">
+            <h4>{{ day }}</h4>
+          </span>
+        </div>
 
-    <!-- ------------------------- -->
-    <div class="week" v-for="week in weeks" :key="week">
-      <div
-        class="calendarDay"
-        :class="{ today: day.isToday }"
-        v-for="day in week"
-        :key="day"
-      >
-        {{ day.label }}
+        <!-- ------------------------- -->
+        <div class="week" v-for="week in weeks" :key="week">
+          <div
+            class="calendarDay"
+            :class="{ today: day.isToday }"
+            v-for="day in week"
+            :key="day"
+          >
+            <a class="dayLink" @click="showModal"> {{ day.label }} </a>
+          </div>
+        </div>
+        <!-- ------------------------- -->
       </div>
     </div>
-      <!-- ------------------------- -->
   </div>
 </template>
 
@@ -37,6 +62,7 @@ export default {
   name: "Calendar",
   data() {
     return {
+      isModalVisible: false,
       date: new Date(),
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
@@ -92,6 +118,15 @@ export default {
       this.date = new Date();
       this.currentMonth = this.date.getMonth();
       this.currentYear = this.date.getFullYear();
+    },
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+    close() {
+      this.$emit("close");
     },
   },
   computed: {
@@ -199,6 +234,7 @@ export default {
 <style scoped>
 .header {
   display: flex;
+  justify-content: right;
   border-bottom: 1px solid black;
 }
 .headerButton {
@@ -210,12 +246,18 @@ export default {
   border: 2px solid #e7e7e7;
   cursor: pointer;
 }
-.monthDisplay {
-  margin-top: 15px;
-  border-bottom: none;
+.mainContent {
+  display: grid;
+  grid-template-areas: "side calendar calendar calendar";
 }
-h3 {
-  margin: 40px 0 0;
+.calendarDiv {
+  grid-area: calendar;
+}
+.sideContent {
+  grid-area: side;
+}
+.monthDisplay {
+  border-bottom: none;
 }
 .weekDays {
   display: flex;
@@ -256,6 +298,9 @@ h3 {
 }
 
 /* ------------- */
+.calendarDay a {
+  cursor: pointer;
+}
 
 ul {
   list-style-type: none;
@@ -267,5 +312,71 @@ li {
 }
 a {
   color: #42b983;
+}
+
+/* modal style */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: #ffffff;
+  box-shadow: 2px 2px 20px 1px;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header,
+.modal-footer {
+  padding: 15px;
+  display: flex;
+}
+
+.modal-header {
+  position: relative;
+  border-bottom: 1px solid #eeeeee;
+  color: #4aae9b;
+  justify-content: space-between;
+}
+
+.modal-footer {
+  border-top: 1px solid #eeeeee;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.modal-body {
+  position: relative;
+  padding: 20px 10px;
+}
+
+.btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  font-size: 20px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #4aae9b;
+  background: transparent;
+}
+
+.btn-green {
+  color: white;
+  background: #4aae9b;
+  border: 1px solid #4aae9b;
+  border-radius: 2px;
+  cursor: pointer;
 }
 </style>
