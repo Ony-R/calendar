@@ -15,7 +15,8 @@
               <p style="text-align: center">{{ selectedDate }} </p>
               
               <label>Event name: <input v-model="eventName"/></label>
-              <p v-show="showEventError">Please enter an event name.</p>
+              <label>Description (optional): <input v-model="eventDescription" /></label>
+              <p v-show="showEventError" class="error">Please enter an event name.</p>
             </slot>
           </section>
 
@@ -45,7 +46,8 @@
         <h2 style="text-align: center">Upcoming Events</h2>
         <div class="eventDetails" v-for="event in eventsList" :key="event">
           <h3>{{event.date}}</h3>
-          <p>{{event.name}}</p>  
+          <p style="font-weight: bold">{{event.name}}</p>  
+          <p>{{event.description}}</p>
         </div>
       </div>
       <!-- calendar content -->
@@ -115,6 +117,7 @@ export default {
       selectedDate: '',
       eventsList: [],
       eventName: '',
+      eventDescription: '',
       showEventError: false
     };
   },
@@ -142,10 +145,12 @@ export default {
     },
     showModal() {
       this.isModalVisible = true;
+      this.showEventError = false;
     },
     closeModal() {
       this.isModalVisible = false;
       this.eventName = '';
+      this.eventDescription = '';
     },
     getCurrentDate() {
       var month = this.monthNames[this.currentMonth];
@@ -155,9 +160,10 @@ export default {
     },
     addEvent() {
       if(this.selectedDate && this.eventName) {
-        this.eventsList.push({date: this.selectedDate, name: this.eventName})
+        this.eventsList.push({date: this.selectedDate, name: this.eventName, description: this.eventDescription})
         this.isModalVisible = false;
         this.eventName = '';
+        this.eventDescription = '';
         this.showEventError = false;
       }
       else {
@@ -442,6 +448,9 @@ a {
   border: 1px solid #4aae9b;
   border-radius: 2px;
   cursor: pointer;
+}
+.error {
+  color: red;
 }
 
 </style>
