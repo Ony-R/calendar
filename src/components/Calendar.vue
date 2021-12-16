@@ -2,21 +2,25 @@
   <div class="hello">
     <!-- create event modal -->
     <div class="modal-backdrop" v-show="isModalVisible">
-      <div class="modal">
-        <header class="modal-header">
-          <slot name="header"> Add an event </slot>
-          <button type="button" class="btn-close" @click="closeModal">x</button>
-        </header>
-        <section class="modal-body">
-          <slot name="body"> {{ selectedDate }} </slot>
-        </section>
+      <div class="modal-wrapper" @click="closeModal" >
+        <div class="modal" @click.stop="">
+          <header class="modal-header">
+            <slot name="header"> Add an event </slot>
+            <button type="button" class="btn-close" @click="closeModal">
+              x
+            </button>
+          </header>
+          <section class="modal-body">
+            <slot name="body"> {{ selectedDate }} </slot>
+          </section>
 
-        <footer class="modal-footer">
-          <slot name="footer"> </slot>
-          <button type="button" class="btn-green" @click="closeModal">
-            Close Modal
-          </button>
-        </footer>
+          <footer class="modal-footer">
+            <slot name="footer"> </slot>
+            <button type="button" class="btn-green" @click="closeModal">
+              Close Modal
+            </button>
+          </footer>
+        </div>
       </div>
     </div>
     <!-- header -->
@@ -49,6 +53,7 @@
             :class="{ today: day.isToday }"
             v-for="day in week"
             :key="day"
+            @click="getCurrentDate"
           >
             <a class="dayLink" @click="showModal"> {{ day.label }} </a>
           </div>
@@ -98,6 +103,7 @@ export default {
         "Dec",
       ],
       weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      selectedDate: ''
     };
   },
   methods: {
@@ -128,6 +134,12 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
+    getCurrentDate() {
+      var month = this.monthNames[this.currentMonth];
+      var day = event.target.parentElement.children[0].text;
+      var year = this.currentYear;
+      this.selectedDate = month + ' ' + day + ', ' + year;
+    }
   },
   computed: {
     thisMonth() {
@@ -170,7 +182,6 @@ export default {
         new Date(this.currentYear, this.currentMonth, 1).getDay() + 1;
       return column;
     },
-    /////////////////////////////////////
     weeks() {
       var today = new Date();
       var year = today.getFullYear();
@@ -225,6 +236,12 @@ export default {
       }
       return weeks;
     },
+    // selectedDate() {
+    //   var month = this.monthNames[this.currentMonth];
+    //   var year = this.currentYear;
+    //   var selectedDate = month + ' ' + year;
+    //   return selectedDate;
+    // }
   },
 };
 </script>
@@ -314,7 +331,8 @@ a {
 
 /* modal style */
 .modal-backdrop {
-  position: fixed;
+  /* position: fixed;
+  z-index: 99998;
   top: 0;
   bottom: 0;
   left: 0;
@@ -322,15 +340,39 @@ a {
   background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
+
+
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
 }
 
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
 .modal {
-  background: #ffffff;
+  /* background: #ffffff;
   box-shadow: 2px 2px 20px 1px;
   overflow-x: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; */
+
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 .modal-header,
