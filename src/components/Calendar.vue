@@ -11,7 +11,12 @@
             </button>
           </header>
           <section class="modal-body">
-            <slot name="body"> {{ selectedDate }} </slot>
+            <slot name="body"> 
+              <p style="text-align: center">{{ selectedDate }} </p>
+              
+              <label>Event name: <input v-model="eventName"/></label>
+              <p v-show="showEventError">Please enter an event name.</p>
+            </slot>
           </section>
 
           <footer class="modal-footer">
@@ -37,12 +42,11 @@
     <div class="mainContent">
       <!-- events/side content -->
       <div class="sideContent">
-        <h2>Upcoming Events</h2>
-        <ul>
-          <li v-for="event in eventsList" :key="event">
-            {{event.date}}
-          </li>
-        </ul>
+        <h2 style="text-align: center">Upcoming Events</h2>
+        <div class="eventDetails" v-for="event in eventsList" :key="event">
+          <h3>{{event.date}}</h3>
+          <p>{{event.name}}</p>  
+        </div>
       </div>
       <!-- calendar content -->
       <div class="calendarDiv">
@@ -109,7 +113,9 @@ export default {
       ],
       weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       selectedDate: '',
-      eventsList: []
+      eventsList: [],
+      eventName: '',
+      showEventError: false
     };
   },
   methods: {
@@ -139,6 +145,7 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+      this.eventName = '';
     },
     getCurrentDate() {
       var month = this.monthNames[this.currentMonth];
@@ -147,8 +154,15 @@ export default {
       this.selectedDate = month + ' ' + day + ', ' + year;
     },
     addEvent() {
-      this.eventsList.push({date: this.selectedDate})
-      this.isModalVisible = false;
+      if(this.selectedDate && this.eventName) {
+        this.eventsList.push({date: this.selectedDate, name: this.eventName})
+        this.isModalVisible = false;
+        this.eventName = '';
+        this.showEventError = false;
+      }
+      else {
+        this.showEventError = true;
+      }      
     }
   },
   computed: {
@@ -429,4 +443,5 @@ a {
   border-radius: 2px;
   cursor: pointer;
 }
+
 </style>
