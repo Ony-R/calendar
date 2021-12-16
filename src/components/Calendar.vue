@@ -16,8 +16,8 @@
 
           <footer class="modal-footer">
             <slot name="footer"> </slot>
-            <button type="button" class="btn-green" @click="closeModal">
-              Close Modal
+            <button type="button" class="btn-green" @click="addEvent">
+              Add event
             </button>
           </footer>
         </div>
@@ -38,6 +38,11 @@
       <!-- events/side content -->
       <div class="sideContent">
         <h2>Upcoming Events</h2>
+        <ul>
+          <li v-for="event in eventsList" :key="event">
+            {{event.date}}
+          </li>
+        </ul>
       </div>
       <!-- calendar content -->
       <div class="calendarDiv">
@@ -103,7 +108,8 @@ export default {
         "Dec",
       ],
       weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      selectedDate: ''
+      selectedDate: '',
+      eventsList: []
     };
   },
   methods: {
@@ -139,6 +145,10 @@ export default {
       var day = event.target.parentElement.children[0].text;
       var year = this.currentYear;
       this.selectedDate = month + ' ' + day + ', ' + year;
+    },
+    addEvent() {
+      this.eventsList.push({date: this.selectedDate})
+      this.isModalVisible = false;
     }
   },
   computed: {
@@ -322,7 +332,7 @@ ul {
   padding: 0;
 }
 li {
-  display: inline-block;
+  /* display: inline-block; */
   margin: 0 10px;
 }
 a {
