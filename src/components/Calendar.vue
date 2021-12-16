@@ -12,11 +12,12 @@
           </header>
           <section class="modal-body">
             <slot name="body"> 
-              <p style="text-align: center">{{ selectedDate }} </p>
-              
-              <label>Event name: <input v-model="eventName"/></label>
-              <label>Description (optional): <input v-model="eventDescription" /></label>
+              <p style="font-weight: bold">{{ selectedDate }} </p>
+              <div class="eventForm">
+              <label>Event name: </label><input v-model="eventName"/>
+              <label>Description (optional): </label><textarea v-model="eventDescription"></textarea>
               <p v-show="showEventError" class="error">Please enter an event name.</p>
+              </div>
             </slot>
           </section>
 
@@ -451,6 +452,35 @@ a {
 }
 .error {
   color: red;
+}
+
+.eventForm {
+  margin: auto;
+  width: 300px;
+  text-align: left;
+  clear: both;
+
+}
+.eventForm input {
+  width: 100%;
+  height: 20px;
+  border-radius: 8px;
+  clear: both;
+  margin-top: 3px;
+  margin-bottom: 5px;
+}
+.eventForm input:focus {
+  outline: none;
+}
+.eventForm textarea {
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  margin-top: 3px;
+  border: 2px solid black;
+}
+.eventForm textarea:focus {
+  outline: none;
 }
 
 </style>
