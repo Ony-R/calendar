@@ -15,7 +15,10 @@
               <p style="font-weight: bold">{{ selectedDate }} </p>
               <div class="eventForm">
               <label>Event name: </label><input v-model="eventName"/>
+              <br/>
               <label>Description (optional): </label><textarea v-model="eventDescription"></textarea>
+              <br/>
+              <label>Time (optional): </label><input v-model="eventTime"/>
               <p v-show="showEventError" class="error">Please enter an event name.</p>
               </div>
             </slot>
@@ -42,15 +45,28 @@
     </div>
     <!-- main content -->
     <div class="mainContent">
+
+
+
       <!-- events/side content -->
       <div class="sideContent">
         <h2 style="text-align: center">Upcoming Events</h2>
         <div class="eventDetails" v-for="event in eventsList" :key="event">
           <h3>{{event.date}}</h3>
-          <p style="font-weight: bold">{{event.name}}</p>  
+          <div style="font-weight: bold">{{event.name}} 
+            
+             <span v-if="event.showTime"> @ {{event.time}}  </span>
+           
+          
+          </div>  
           <p>{{event.description}}</p>
+          
         </div>
       </div>
+
+
+
+
       <!-- calendar content -->
       <div class="calendarDiv">
         <div class="weekDays">
@@ -119,7 +135,8 @@ export default {
       eventsList: [],
       eventName: '',
       eventDescription: '',
-      showEventError: false
+      eventTime: '',
+      showEventError: false,
     };
   },
   methods: {
@@ -152,6 +169,7 @@ export default {
       this.isModalVisible = false;
       this.eventName = '';
       this.eventDescription = '';
+      this.eventTime = '';
     },
     getCurrentDate() {
       var month = this.monthNames[this.currentMonth];
@@ -161,10 +179,15 @@ export default {
     },
     addEvent() {
       if(this.selectedDate && this.eventName) {
-        this.eventsList.push({date: this.selectedDate, name: this.eventName, description: this.eventDescription})
+        if(this.eventTime !== '') {
+          this.eventsList.push({date: this.selectedDate, name: this.eventName, description: this.eventDescription, time: this.eventTime, showTime: true})
+        } else {
+          this.eventsList.push({date: this.selectedDate, name: this.eventName, description: this.eventDescription, time: this.eventTime, showTime: false})
+        }
         this.isModalVisible = false;
         this.eventName = '';
         this.eventDescription = '';
+        this.eventTime = '';
         this.showEventError = false;
       }
       else {
@@ -462,7 +485,7 @@ a {
 
 }
 .eventForm input {
-  width: 100%;
+  width: 85%;
   height: 20px;
   border-radius: 8px;
   clear: both;
@@ -473,7 +496,7 @@ a {
   outline: none;
 }
 .eventForm textarea {
-  width: 100%;
+  width: 85%;
   height: 50px;
   border-radius: 8px;
   margin-top: 3px;
