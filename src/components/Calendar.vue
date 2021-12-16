@@ -16,9 +16,9 @@
               <div class="eventForm">
               <label>Event name: </label><input v-model="eventName"/>
               <br/>
-              <label>Description (optional): </label><textarea v-model="eventDescription"></textarea>
-              <br/>
               <label>Time (optional): </label><input v-model="eventTime"/>
+              <br/>
+              <label>Description (optional): </label><textarea v-model="eventDescription"></textarea>
               <p v-show="showEventError" class="error">Please enter an event name.</p>
               </div>
             </slot>
@@ -179,11 +179,13 @@ export default {
     },
     addEvent() {
       if(this.selectedDate && this.eventName) {
-        if(this.eventTime !== '') {
-          this.eventsList.push({date: this.selectedDate, name: this.eventName, description: this.eventDescription, time: this.eventTime, showTime: true})
-        } else {
-          this.eventsList.push({date: this.selectedDate, name: this.eventName, description: this.eventDescription, time: this.eventTime, showTime: false})
-        }
+        this.eventsList.push({
+          date: this.selectedDate, 
+          name: this.eventName, 
+          description: this.eventDescription, 
+          time: this.eventTime, 
+          showTime: this.eventTime ? true : false
+          });
         this.isModalVisible = false;
         this.eventName = '';
         this.eventDescription = '';
