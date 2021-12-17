@@ -84,7 +84,7 @@
             :key="day"
             @click="getCurrentDate"
           >
-            <a class="dayLink" @click="showModal"> {{ day.label }} </a>
+            <a class='dayLink' :class='{today: day.isToday}' @click="showModal"> {{ day.label }} </a>
           </div>
         </div>
       </div>
@@ -263,7 +263,7 @@ export default {
     weeks() {
       var today = new Date();
       var year = today.getFullYear();
-      var month = today.getMonth + 1;
+      var month = today.getMonth() + 1;
       //var day = today.getDate();
       const weeks = [];
       let monthStarted = false,
@@ -288,6 +288,7 @@ export default {
           //append day info for the current week
           //note: this might or might not be an actual month day
           week.push({
+            monthDay: monthDay,
             label: monthDay ? monthDay.toString() : "",
             number: monthDay,
             weekdayNumber: d,
@@ -296,7 +297,7 @@ export default {
             afterMonth: monthEnded,
             inMonth: monthStarted && !monthEnded,
             isToday:
-              monthDay === today &&
+              monthDay === (today.getDate()) &&
               this.currentMonth + 1 === month &&
               this.currentYear === year,
             isFirstDay: monthDay === 1,
@@ -312,6 +313,10 @@ export default {
         //apend week info for the month
         weeks.push(week);
       }
+      console.log(today.getDay() + 1)
+      console.log(year)
+      console.log(weeks)
+      console.log(this.currentMonth + 1)
       return weeks;
     },
     // selectedDate() {
@@ -528,6 +533,11 @@ a {
 }
 .eventForm textarea:focus {
   outline: none;
+}
+.today {
+  font-weight: 500;
+  color: grey;
+  background-color: lightblue;
 }
 
 </style>
