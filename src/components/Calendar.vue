@@ -85,6 +85,7 @@
             @click="getCurrentDate"
           >
             <a class='dayLink' :class='{today: day.isToday}' @click="showModal"> {{ day.label }} </a>
+            <!-- <p v-if=""></p>  make computed property -->
           </div>
         </div>
       </div>
@@ -201,9 +202,6 @@ export default {
           description: this.eventDescription, 
           time: this.eventTime, 
           showTime: this.eventTime ? true : false,
-
-
-          //////////this isn't working yet... why?
           isCurrent: this.isCurrent ? true : false
           });
         this.isModalVisible = false;
