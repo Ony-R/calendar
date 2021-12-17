@@ -51,16 +51,17 @@
       <!-- events/side content -->
       <div class="sideContent">
         <h2 style="text-align: center">Upcoming Events</h2>
-        <div class="eventDetails" v-for="event in eventsList" :key="event">
-          <h3>{{event.date}}</h3>
-          <div style="font-weight: bold">{{event.name}} 
+        <div class="eventDetails" v-for="event in eventsList" :key="event" >
+          <div v-if="event.isCurrent">
+            <h3>{{event.date}}</h3>
+            <div style="font-weight: bold">{{event.name}} 
+              
+              <span v-if="event.showTime"> @ {{event.time}}  </span>
             
-             <span v-if="event.showTime"> @ {{event.time}}  </span>
-           
-          
-          </div>  
-          <p>{{event.description}}</p>
-          
+            
+            </div>  
+            <p>{{event.description}}</p>
+          </div>
         </div>
       </div>
 
@@ -137,6 +138,7 @@ export default {
       eventDescription: '',
       eventTime: '',
       showEventError: false,
+      isCurrent: false
     };
   },
   methods: {
@@ -178,23 +180,43 @@ export default {
       this.selectedDate = month + ' ' + day + ', ' + year;
     },
     addEvent() {
+      var dayNumber = this.selectedDate.split(' ')[1].split(',')[0];
+      var month = this.currentMonth + 1;
+      var dateString = this.currentYear + '-' + month + '-' + dayNumber;
+      var date = new Date();
+      var newDate = date.setUTCHours(0,0,0,0);
+      var calendarDate =  new Date(dateString).getTime();
+
+      //check if the event happens before today
+      if(newDate > calendarDate) {
+        this.isCurrent = false;
+      } else {
+        this.isCurrent = true;
+      } 
+      
       if(this.selectedDate && this.eventName) {
         this.eventsList.push({
           date: this.selectedDate, 
           name: this.eventName, 
           description: this.eventDescription, 
           time: this.eventTime, 
-          showTime: this.eventTime ? true : false
+          showTime: this.eventTime ? true : false,
+
+
+          //////////this isn't working yet... why?
+          isCurrent: this.isCurrent ? true : false
           });
         this.isModalVisible = false;
         this.eventName = '';
         this.eventDescription = '';
         this.eventTime = '';
         this.showEventError = false;
+       /// console.log(new Date())
       }
       else {
         this.showEventError = true;
-      }      
+      }  
+    //  console.log(this.eventsList)    
     }
   },
   computed: {
