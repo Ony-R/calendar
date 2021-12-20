@@ -85,7 +85,13 @@
             @click="getCurrentDate"
           >
             <a class='dayLink' :class='{today: day.isToday}' @click="showModal"> {{ day.label }} </a>
+            
             <!-- <p v-if=""></p>  make computed property -->
+            <div v-for="event in eventsList" :key="event" >
+              
+              <p v-show="event.dateString == day.dateString">{{event.name}}</p>
+              
+            </div>
           </div>
         </div>
       </div>
@@ -202,19 +208,21 @@ export default {
           description: this.eventDescription, 
           time: this.eventTime, 
           showTime: this.eventTime ? true : false,
-          isCurrent: this.isCurrent ? true : false
+          isCurrent: this.isCurrent ? true : false,
+          dayNumber: dayNumber,
+          dateString: dateString
+          
           });
         this.isModalVisible = false;
         this.eventName = '';
         this.eventDescription = '';
         this.eventTime = '';
         this.showEventError = false;
-       /// console.log(new Date())
       }
       else {
         this.showEventError = true;
-      }  
-    //  console.log(this.eventsList)    
+      }    
+      console.log(this.eventsList)
     }
   },
   computed: {
@@ -300,6 +308,7 @@ export default {
               this.currentYear === year,
             isFirstDay: monthDay === 1,
             isLastDay: monthDay === this.datesInMonth,
+            dateString: this.currentYear + '-' + (this.currentMonth + 1) + '-' + monthDay,
           });
 
           //triger end of month on last day
@@ -311,18 +320,15 @@ export default {
         //apend week info for the month
         weeks.push(week);
       }
-      console.log(today.getDay() + 1)
-      console.log(year)
       console.log(weeks)
-      console.log(this.currentMonth + 1)
       return weeks;
     },
-    // selectedDate() {
-    //   var month = this.monthNames[this.currentMonth];
-    //   var year = this.currentYear;
-    //   var selectedDate = month + ' ' + year;
-    //   return selectedDate;
-    // }
+    calendarEvent() {
+      var events = this.eventsList;
+      //var selDate = this.selectedDate;
+      console.log(events)
+      return events;
+    }
   },
 };
 </script>
@@ -388,9 +394,10 @@ export default {
 .calendarDay {
   width: 14.2857%;
   height: 100px;
-  display: flex;
+  text-align: center;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
   border: solid 1px #aaaaaa;
 }
 
