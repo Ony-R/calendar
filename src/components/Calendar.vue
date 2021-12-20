@@ -47,20 +47,36 @@
     <div class="mainContent">
 
 
-
       <!-- events/side content -->
       <div class="sideContent">
-        <h2 style="text-align: center">Upcoming Events</h2>
-        <div class="eventDetails" v-for="event in eventsList" :key="event" >
-          <div v-if="event.isCurrent">
-            <h3>{{event.date}}</h3>
-            <div style="font-weight: bold">{{event.name}} 
+        <select v-model="viewSelect">
+          <option>Upcoming Events</option>
+          <option>All Events</option>
+        </select>
+        <div v-if="viewSelect == 'Upcoming Events'">
+          <div class="eventDetails" v-for="event in eventsList" :key="event" >
+            <div v-if="event.isCurrent">
+              <h3>{{event.date}}</h3>
+              <div style="font-weight: bold">{{event.name}} 
+                
+                <span v-if="event.showTime"> @ {{event.time}}  </span>
               
-              <span v-if="event.showTime"> @ {{event.time}}  </span>
-            
-            
-            </div>  
-            <p>{{event.description}}</p>
+              
+              </div>  
+              <p>{{event.description}}</p>
+            </div>
+          </div>
+        </div>
+        <div v-if="viewSelect == 'All Events'">
+          <div class="eventDetails" v-for="event in eventsList" :key="event" >
+              <h3>{{event.date}}</h3>
+              <div style="font-weight: bold">{{event.name}} 
+                
+                <span v-if="event.showTime"> @ {{event.time}}  </span>
+              
+              
+              </div>  
+              <p>{{event.description}}</p>
           </div>
         </div>
       </div>
@@ -106,6 +122,7 @@ export default {
   name: "Calendar",
   data() {
     return {
+      viewSelect: 'Upcoming Events',
       isModalVisible: false,
       date: new Date(),
       currentMonth: new Date().getMonth(),
@@ -325,10 +342,12 @@ export default {
     },
     calendarEvent() {
       var events = this.eventsList;
-      //var selDate = this.selectedDate;
-      console.log(events)
+      for(let i = 0; i < events.length; i++) {
+        console.log('event')
+      }
       return events;
-    }
+    },
+
   },
 };
 </script>
