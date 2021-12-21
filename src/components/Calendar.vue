@@ -49,19 +49,18 @@
 
       <!-- events/side content -->
       <div class="sideContent">
-        <select v-model="viewSelect">
-          <option>Upcoming Events</option>
-          <option>All Events</option>
-        </select>
+        <div class="select-dropdown">
+          <select v-model="viewSelect">
+            <option>Upcoming Events</option>
+            <option>All Events</option>
+          </select>
+        </div>
         <div v-if="viewSelect == 'Upcoming Events'">
           <div class="eventDetails" v-for="event in eventsList" :key="event" >
             <div v-if="event.isCurrent">
               <h3>{{event.date}}</h3>
-              <div style="font-weight: bold">{{event.name}} 
-                
-                <span v-if="event.showTime"> @ {{event.time}}  </span>
-              
-              
+              <div style="font-weight: bold">{{event.name}}              
+                <span v-if="event.showTime"> @ {{event.time}}  </span>    
               </div>  
               <p>{{event.description}}</p>
             </div>
@@ -70,11 +69,8 @@
         <div v-if="viewSelect == 'All Events'">
           <div class="eventDetails" v-for="event in eventsList" :key="event" >
               <h3>{{event.date}}</h3>
-              <div style="font-weight: bold">{{event.name}} 
-                
-                <span v-if="event.showTime"> @ {{event.time}}  </span>
-              
-              
+              <div style="font-weight: bold">{{event.name}}                 
+                <span v-if="event.showTime"> @ {{event.time}}  </span>              
               </div>  
               <p>{{event.description}}</p>
           </div>
@@ -377,6 +373,7 @@ export default {
 }
 .sideContent {
   grid-area: side;
+  
 }
 .monthDisplay {
   border-bottom: none;
@@ -562,6 +559,46 @@ a {
   font-weight: 500;
   color: grey;
   background-color: lightblue;
+}
+
+.select-dropdown,
+.select-dropdown * {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  box-sizing: border-box;
+}
+.select-dropdown {
+  position: relative;
+  background-color: #E6E6E6;
+  border-radius: 4px;
+}
+.select-dropdown select {
+  font-size: 1rem;
+  font-weight: normal;
+  width: 100%;
+  padding: 8px 24px 8px 10px;
+  border: none;
+  background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  appearance: none;
+}
+.select-dropdown select:active, .select-dropdown select:focus {
+  outline: none;
+  box-shadow: none;
+}
+.select-dropdown:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-top: 5px solid #aaa;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
 }
 
 </style>
