@@ -101,7 +101,7 @@
             <!-- <p v-if=""></p>  make computed property -->
             <div v-for="event in eventsList" :key="event" >
               
-              <p v-show="event.dateString == day.dateString">{{event.name}}</p>
+              <p class="eventOnCalendar" v-show="event.dateString == day.dateString">{{event.name}}</p>
               
             </div>
           </div>
@@ -333,14 +333,14 @@ export default {
         //apend week info for the month
         weeks.push(week);
       }
-      console.log(weeks)
+      //console.log(weeks)
       return weeks;
     },
-    calendarEvent() {
+    filteredEvents() {
+      //var filteredList = [];
       var events = this.eventsList;
-      for(let i = 0; i < events.length; i++) {
-        console.log('event')
-      }
+      console.log(events)
+ 
       return events;
     },
 
@@ -419,6 +419,10 @@ export default {
 
 .calendarDay a {
   cursor: pointer;
+}
+
+.eventOnCalendar {
+  
 }
 
 ul {
@@ -570,7 +574,7 @@ a {
 }
 .select-dropdown {
   position: relative;
-  background-color: #E6E6E6;
+  background-color: #e4f2f5;
   border-radius: 4px;
 }
 .select-dropdown select {
